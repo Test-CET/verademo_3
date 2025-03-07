@@ -33,15 +33,26 @@ jobs:
 #        path: target/verademo.war # Wildcards can be used to filter the files copied into the container. See: https://github.com/actions/upload-artifact
 
      # run the pipeline scan action
-    - name: pipeline-scan action step
-      id: pipeline-scan
-      uses: veracode/Veracode-pipeline-scan-action@v1.0.12
+    - uses: wei/curl@master
       with:
-        vid: ${{ secrets.VERACODE_API_ID }}
-        vkey: ${{ secrets.VERACODE_API_KEY }}
-        file: "target/verademo.war" 
-        veracode_policy_name: "VeraDemo Policy"
-        fail_build: false
+        args: -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+    - run: unzip -o pipeline-scan-LATEST.zip
+    
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+#    - run: java -Dpipeline.debug=true -jar pipeline-scan.jar --veracode_api_id "${{secrets.VERACODE_API_ID}}" --veracode_api_key "${{secrets.VERACODE_API_KEY}}" --fail_on_severity="Very High, High" --file "/home/runner/work/verademo/verademo/target/verademo.war"
+    - run: java -jar pipeline-scan.jar --veracode_api_id "${{secrets.VERACODE_API_ID}}" --veracode_api_key "${{secrets.VERACODE_API_KEY}}" --fail_on_severity="Very High, High" --file "/home/runner/work/verademo/verademo/target/verademo.war"
+      continue-on-error: true
+#    - name: pipeline-scan action step
+#      id: pipeline-scan
+#      uses: veracode/Veracode-pipeline-scan-action@v1.0.12
+#      with:
+#        vid: ${{ secrets.VERACODE_API_ID }}
+#        vkey: ${{ secrets.VERACODE_API_KEY }}
+#        file: "target/verademo.war" 
+#        veracode_policy_name: "VeraDemo Policy"
+#        fail_build: false
   
     # This step will import the flaws from the step above
     - name: import flaws as issues
