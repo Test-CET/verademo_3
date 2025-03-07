@@ -30,23 +30,7 @@ jobs:
       with:
         path: target/verademo.war # Wildcards can be used to filter the files copied into the container. See: https://github.com/actions/upload-artifact
 
-#  pipeline_scan:
-#    # needs the build step before this job will start running
-#    needs: build
-#    runs-on: ubuntu-latest
-#    name: pipeline scan
-#
-#    steps:
-#      - name: checkout repo
-#        uses: actions/checkout@v4
-#      
-#      # get the compiled binary from a previous job
-#      - name: get archive
-#        uses: actions/download-artifact@v4
-#        with:
-#          name: target/verademo.war
-
-      # run the pipeline scan action
+     # run the pipeline scan action
     - name: pipeline-scan action step
       id: pipeline-scan
       uses: veracode/Veracode-pipeline-scan-action@v1.0.12
@@ -57,19 +41,8 @@ jobs:
         veracode_policy_name: "VeraDemo Policy"
         fail_build: false
   
-  # This step will import the flaws from the step above
-  import-issues:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      issues: write
-    steps:
-      - name: get scan results
-        uses: actions/download-artifact@v4
-        with:
-          name: filtered-results
-
-      - name: import flaws as issues
-        uses: veracode/veracode-flaws-to-issues@v2.1.19
-        with:
-          scan-results-json: 'filtered_results.json'
+    # This step will import the flaws from the step above
+    - name: import flaws as issues
+      uses: veracode/veracode-flaws-to-issues@v2.1.19
+      with:
+        scan-results-json: 'results.json'
