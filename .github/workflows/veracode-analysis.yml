@@ -44,7 +44,7 @@ jobs:
       - name: get archive
         uses: actions/download-artifact@v4
         with:
-          name: verademo.war
+          name: target/verademo.war
 
       # run the pipeline scan action
       - name: pipeline-scan action step
@@ -53,7 +53,7 @@ jobs:
         with:
           vid: ${{ secrets.VERACODE_API_ID }}
           vkey: ${{ secrets.VERACODE_API_KEY }}
-          file: "verademo.war" 
+          file: "target/verademo.war" 
           veracode_policy_name: "VeraDemo Policy"
           fail_build: false
   
