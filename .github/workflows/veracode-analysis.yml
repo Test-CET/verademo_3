@@ -16,6 +16,8 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
   
     - uses: actions/checkout@v4
@@ -26,9 +28,9 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
       
-    - uses: actions/upload-artifact@v4 # Copy files from repository to docker container so the next action can access them.
-      with:
-        path: target/verademo.war # Wildcards can be used to filter the files copied into the container. See: https://github.com/actions/upload-artifact
+#    - uses: actions/upload-artifact@v4 # Copy files from repository to docker container so the next action can access them.
+#      with:
+#        path: target/verademo.war # Wildcards can be used to filter the files copied into the container. See: https://github.com/actions/upload-artifact
 
      # run the pipeline scan action
     - name: pipeline-scan action step
