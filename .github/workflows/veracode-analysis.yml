@@ -28,7 +28,7 @@ jobs:
       
     - uses: actions/upload-artifact@v4 # Copy files from repository to docker container so the next action can access them.
       with:
-        path: '**/*.war' # Wildcards can be used to filter the files copied into the container. See: https://github.com/actions/upload-artifact
+        path: target/*.war # Wildcards can be used to filter the files copied into the container. See: https://github.com/actions/upload-artifact
 
   pipeline_scan:
     # needs the build step before this job will start running
